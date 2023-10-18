@@ -50,10 +50,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-	const { products } = await executeGraphQL(ProductListDocument, {
-		revalidate: 60,
-		variables: { first: 20 },
-	});
+	const { products } = await executeGraphQL(ProductListDocument, { revalidate: 60 });
 
 	const paths = products?.edges.map(({ node: { slug } }) => ({ slug })) || [];
 	return paths;
