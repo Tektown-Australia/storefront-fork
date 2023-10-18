@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { type Metadata } from "next";
+import xss from "xss";
 import { AddButton } from "./AddButton";
 import { VariantSelector } from "@/ui/components/VariantSelector";
 import { ProductImageWrapper } from "@/ui/atoms/ProductImageWrapper";
@@ -49,7 +50,10 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-	const { products } = await executeGraphQL(ProductListDocument, { revalidate: 60 });
+	const { products } = await executeGraphQL(ProductListDocument, {
+		revalidate: 60,
+		variables: { first: 20 },
+	});
 
 	const paths = products?.edges.map(({ node: { slug } }) => ({ slug })) || [];
 	return paths;
@@ -150,7 +154,9 @@ export default async function Page(props: { params: { slug: string }; searchPara
 						)}
 						{description && (
 							<div className="mt-8 space-y-6">
-								<div dangerouslySetInnerHTML={{ __html: description }}></div>
+								{description.map((content) => (
+									<div key={content} dangerouslySetInnerHTML={{ __html: xss(content) }} />
+								))}
 							</div>
 						)}
 						<AvailabilityMessage isAvailable={isAvailable} />
