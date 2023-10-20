@@ -3,9 +3,8 @@ import { executeGraphQL } from "@/lib/graphql";
 import { ProductsList } from "@/ui/components/ProductsList";
 
 export const metadata = {
-	title: "ACME Storefront, powered by Saleor & Next.js",
-	description:
-		"Storefront Next.js Example for building performant e-commerce experiences with Saleor - the composable, headless commerce platform for global brands.",
+	title: "Saleor Storefront example",
+	description: "Starter pack for building performant e-commerce experiences with Saleor.",
 };
 
 export default async function Page() {
